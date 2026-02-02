@@ -1,61 +1,7 @@
 const express = require('express');
 const pool = require('../db');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const router = express.Router();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// AI Auto-fill endpoint - get program details from AI
-router.post('/ai-autofill', async (req, res) => {
-    try {
-        const { university_name, program_name, country } = req.body;
-
-        if (!university_name && !program_name) {
-            return res.status(400).json({ error: 'University name or program name is required' });
-        }
-
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-
-        const prompt = `You are a helpful assistant for Master's degree applications. 
-Given this information:
-- University: ${university_name || 'Not specified'}
-- Program: ${program_name || 'Computer Science / Data Science related'}
-- Country: ${country || 'Germany or Switzerland'}
-
-Please provide accurate details about this university program. Return ONLY valid JSON (no markdown, no code blocks) with these exact fields:
-{
-  "university_name": "Full official university name",
-  "program_name": "Full official program name (e.g., M.Sc. Computer Science)",
-  "country": "Germany or Switzerland",
-  "website": "Official program URL if known, or empty string",
-  "ranking": null or number (QS/THE ranking if known),
-  "tuition_fees": "Tuition info (e.g., '€1,500/semester' or 'Free for EU students')",
-  "requirements": "Key requirements: GPA, IELTS/TOEFL scores, GRE if needed, any specific prerequisites",
-  "deadline": "Application deadline period if known (e.g., 'January - March for Fall intake')"
-}
-
-If you don't have accurate information for a field, use reasonable estimates or leave it empty/null. Be concise.`;
-
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
-
-        // Parse JSON from response
-        let data;
-        try {
-            // Try to extract JSON if wrapped in markdown
-            const jsonMatch = text.match(/\{[\s\S]*\}/);
-            data = JSON.parse(jsonMatch ? jsonMatch[0] : text);
-        } catch (parseErr) {
-            console.error('Failed to parse AI response:', text);
-            return res.status(500).json({ error: 'Failed to parse AI response', raw: text });
-        }
-
-        res.json(data);
-    } catch (err) {
-        console.error('AI autofill error:', err);
-        res.status(500).json({ error: 'Failed to get AI suggestions', details: err.message });
-    }
-});
 
 // Get all research items
 router.get('/', async (req, res) => {

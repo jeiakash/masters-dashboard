@@ -47,24 +47,6 @@ export const applicationsApi = {
     },
 };
 
-// Chat API
-export const chatApi = {
-    send: async (message, sessionId = 'default') => {
-        const response = await api.post('/chat', { message, sessionId });
-        return response.data;
-    },
-
-    getHistory: async (limit = 50) => {
-        const response = await api.get('/chat/history', { params: { limit } });
-        return response.data;
-    },
-
-    clearHistory: async (sessionId) => {
-        const response = await api.delete('/chat/history', { params: { sessionId } });
-        return response.data;
-    },
-};
-
 // Preparation API
 export const preparationApi = {
     getAll: async (type = null) => {
@@ -128,16 +110,6 @@ export const researchApi = {
 
     delete: async (id) => {
         const response = await api.delete(`/research/${id}`);
-        return response.data;
-    },
-
-    // AI auto-fill - get program info from AI
-    aiAutofill: async (university_name, program_name, country) => {
-        const response = await api.post('/research/ai-autofill', {
-            university_name,
-            program_name,
-            country
-        });
         return response.data;
     },
 };

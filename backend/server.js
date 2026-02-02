@@ -6,7 +6,6 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 
 const applicationsRouter = require('./routes/applications');
-const chatRouter = require('./routes/chat');
 const preparationRouter = require('./routes/preparation');
 const researchRouter = require('./routes/research');
 
@@ -71,7 +70,6 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/applications', applicationsRouter);
-app.use('/api/chat', chatRouter);
 app.use('/api/preparation', preparationRouter);
 app.use('/api/research', researchRouter);
 

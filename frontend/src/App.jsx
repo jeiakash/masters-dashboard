@@ -8,7 +8,6 @@ import DataTable from './components/DataTable';
 import DeadlineCountdown from './components/DeadlineCountdown';
 import ApplicationForm from './components/ApplicationForm';
 import ExportButton from './components/ExportButton';
-import AIChat from './components/AIChat';
 import PreparationTracker from './components/PreparationTracker';
 import ResearchTracker from './components/ResearchTracker';
 
@@ -246,9 +245,6 @@ function Dashboard() {
         onSubmit={handleFormSubmit}
         initialData={editingApp}
       />
-
-      {/* AI Chat */}
-      <AIChat />
     </div>
   );
 }
